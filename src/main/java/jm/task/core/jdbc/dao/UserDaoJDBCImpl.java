@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    Util connectionManager = new Util();
+    private Util connectionManager = new Util();
     public UserDaoJDBCImpl() {
     }
 
+    @Override
     public void createUsersTable() {
         try (Connection connection = connectionManager.getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS users (id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
@@ -23,6 +24,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public void dropUsersTable() {
         try (Connection connection = connectionManager.getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS users;");
@@ -31,6 +33,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public void saveUser(String name, String lastName, byte age) {
         try (Connection connection = connectionManager.getConnection(); PreparedStatement statement = connection.prepareStatement(
                 "INSERT users(name, lastName, age) VALUES (?, ?, ?);")) {
@@ -44,6 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public void removeUserById(long id) {
         try (Connection connection = connectionManager.getConnection(); PreparedStatement statement = connection.prepareStatement(
                 "DELETE FROM users WHERE id = ?;")){
@@ -54,6 +58,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+    @Override
     public List<User> getAllUsers() {
         List<User> mvpClub= new ArrayList<>();
         try (Connection connection = connectionManager.getConnection();
@@ -70,6 +75,7 @@ public class UserDaoJDBCImpl implements UserDao {
         return mvpClub;
     }
 
+    @Override
     public void cleanUsersTable() {
         try (Connection connection = connectionManager.getConnection(); Statement statement = connection.createStatement()){
             statement.executeUpdate("TRUNCATE TABLE users;");
